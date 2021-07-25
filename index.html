@@ -103,11 +103,22 @@ function showTags(showV) {
 		for (var i = 0; i < myObj.tags.length; i++) {
 			var tagE = myObj.tags[i];
 			var imageurl = location.host + "/" + myObj.name + ":" + tagE;
-			response += "<button onclick=copyUrl(\"" + imageurl + "\")  class=\"tags\" >" + imageurl + "</button>";
+			response += "<button onclick=openmanifest(\"" + myObj.name + "\",\"" + tagE + "\")  class=\"tags\" >" + imageurl + "</button>";
 		}
 		content.innerHTML = response;
 	}
 	xmlhttp.open("GET", "/v2/" + showV + "/tags/list");
+	xmlhttp.send();
+}
+
+function openmanifest(imagename, tag) {
+	const xmlhttp = new XMLHttpRequest();
+	xmlhttp.onload = function() {
+		var jsonPretty = JSON.stringify(JSON.parse(this.responseText),null,2);  
+		var myWindow = window.open("", "MsgWindow", "width=600,height=600");
+		myWindow.document.write( "<pre>"+ jsonPretty + "</pre>");
+	}
+	xmlhttp.open("GET", "/v2/" + imagename + "/manifests/" + tag);
 	xmlhttp.send();
 }
 
