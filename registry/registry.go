@@ -461,6 +461,7 @@ func alive(path string, handler http.Handler) http.Handler {
 		if r.URL.Path == path {
 			w.Header().Set("Cache-Control", "no-cache")
 			w.WriteHeader(http.StatusOK)
+			http.ServeFile(w, r, "/data/index.html")
 			return
 		}
 
