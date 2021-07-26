@@ -215,7 +215,13 @@ func getCipherSuiteNames(ids []uint16) []string {
 // set ACME-server/DirectoryURL, if provided
 func setDirectoryURL(directoryurl string) *acme.Client {
 	if len(directoryurl) > 0 {
-		return &acme.Client{DirectoryURL: directoryurl}
+		 tr := &http.Transport{
+			 TLSClientConfig: &tls.Config{InsecureSkipVerify: true},
+                }
+		return &acme.Client{
+			DirectoryURL: directoryurl,
+			HTTPClient: &http.Client{Transport: tr},
+		}
 	}
 	return nil
 }
